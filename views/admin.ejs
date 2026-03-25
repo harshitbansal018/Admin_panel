@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Admin Panel</title>
+    <link rel="stylesheet" href="/admin.css">
+</head>
+
+<body>
+    <div class="admin-container">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+
+                <% if (user && user.name) { %>
+                    <div class="user-avatar">
+                        <%= user.name.charAt(0).toUpperCase() %>
+                    </div>
+                    <div class="user-name">
+                        <%= user.name %>
+                    </div>
+                <% } %>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/admin/dashboard"
+                           class="nav-link <%= activePage === 'dashboard' ? 'active' : '' %>">
+                           Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/admin/movies"
+                           class="nav-link <%= activePage === 'movies' ? 'active' : '' %>">
+                           Movie List
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/admin/publishers"
+                           class="nav-link <%= activePage === 'publishers' ? 'active' : '' %>">
+                           Publisher List
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/admin/users"
+                           class="nav-link <%= activePage === 'users' ? 'active' : '' %>">
+                           User List
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="/admin/movie-types"
+                           class="nav-link <%= activePage === 'movie-types' ? 'active' : '' %>">
+                           Movie Types
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/logout" class="nav-link">Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <% const currentPage = activePage || 'dashboard'; %>
+
+            <div class="content-header">
+                <h1>
+                    <%= currentPage === 'dashboard' ? 'Dashboard' :
+                        currentPage === 'movies' ? 'Movie List' :
+                        currentPage === 'publishers' ? 'Publisher List' :
+                        currentPage === 'users' ? 'User List' :
+                        currentPage === 'movie-types' ? 'Movie Types' :
+                        'Admin Panel' %>
+                </h1>
+            </div>
+
+            <div class="content-body">
+
+                <% if (currentPage === 'dashboard') { %>
+                    <%- include('dashboard', {
+                        totalMovies: totalMovies,
+                        totalUsers: totalUsers,
+                        totalTypes: totalTypes
+                    }) %>
+                <% } %>
+
+                <% if (currentPage === 'movies') { %>
+                    <%- include('movies') %>
+                <% } %>
+
+                <% if (currentPage === 'users') { %>
+                    <%- include('user', { users: users }) %>
+                <% } %>
+
+                <% if (currentPage === 'movie-types') { %>
+                    <%- include('movieType') %>
+                <% } %>
+
+                <% if (currentPage === 'publishers') { %>
+                    <%- include('publisher') %>
+                <% } %>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

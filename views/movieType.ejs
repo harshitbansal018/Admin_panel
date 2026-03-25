@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Types</title>
+    <link rel="stylesheet" href="/movieType.css">
+</head>
+<body>
+    <h2>Movie Types</h2>
+
+<table class="movieType-table">
+    <thead>
+        <tr>
+            <th>Type Name</th>
+            <th>Created At</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+ <tbody>
+    <% if (types.length > 0) { %>
+        <% types.forEach(type => { %>
+            <tr>
+                <td><%= type.type_name %></td>
+                <td><%= type.created_at %></td>
+                <td><span class="status <%= type.status %>"><%= type.status %></span></td>
+            </tr>
+        <% }) %>
+    <% } else { %>
+        <tr>
+            <td colspan="3">No movie types found</td>
+        </tr>
+    <% } %>
+</tbody>
+</table>
+</body>
+</html>

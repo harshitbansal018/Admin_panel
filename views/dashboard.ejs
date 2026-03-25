@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies Dashboard</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/dashboard.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+        <h1>🎬 Admin Dashboard</h1>
+
+        <div class="card-container">
+
+            <!-- Total Movies -->
+            <div class="card movies">
+                <h3>Total Movies</h3>
+                <div class="count">
+                    <%= typeof totalMovies !== 'undefined' ? totalMovies : 0 %>
+                </div>
+            </div>
+
+            <!-- Total Users -->
+            <div class="card users">
+                <h3>Total Users</h3>
+                <div class="count">
+                    <%= typeof totalUsers !== 'undefined' ? totalUsers : 0 %>
+                </div>
+            </div>
+
+            <!-- Total Types -->
+            <div class="card types">
+                <h3>Total Movie Types</h3>
+                <div class="count">
+                    <%= typeof totalTypes !== 'undefined' ? totalTypes : 0 %>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

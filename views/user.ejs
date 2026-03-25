@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Types</title>
+    <link rel="stylesheet" href="/user.css">
+</head>
+<body>
+    <h2>User List</h2>
+
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% if (users && users.length > 0) { %>
+
+            <% users.forEach(function(user) { %>
+                <tr>
+                    <td><%= user.email %></td>
+                    <td><%= user.name %></td>
+                    <td>
+                        <span class="status <%= user.is_active ? 'active' : 'inactive' %>">
+                            <%= user.is_active ? 'Active' : 'Inactive' %>
+                        </span>
+                    </td>
+                    <td><%= user.created_at || '-' %></td>
+                </tr>
+            <% }) %>
+
+        <% } else { %>
+
+            <tr>
+                <td colspan="4">No users found</td>
+            </tr>
+
+        <% } %>
+    </tbody>
+</table>
+
+</body>
+</html>

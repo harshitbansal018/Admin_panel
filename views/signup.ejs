@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Signup</title>
+    <link rel="stylesheet" href="/signup.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-card">
+            <h2>Admin Signup</h2>
+           
+                <!-- <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-error"><%= error %></div>
+                <% } %> -->
+            <form method="post" id="signupForm" action="/admin/signup">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required />
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required />
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+                <button type="submit">Signup</button>
+            </form>
+            <p>Already registered? <a href="/admin/login">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>
