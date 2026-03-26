@@ -14,8 +14,8 @@
         <tr>
             <th>Email</th>
             <th>Name</th>
-            <th>Status</th>
             <th>Created At</th>
+            <th>Status</th>
         </tr>
     </thead>
 
@@ -26,12 +26,19 @@
                 <tr>
                     <td><%= user.email %></td>
                     <td><%= user.name %></td>
-                    <td>
-                        <span class="status <%= user.is_active ? 'active' : 'inactive' %>">
-                            <%= user.is_active ? 'Active' : 'Inactive' %>
-                        </span>
-                    </td>
                     <td><%= user.created_at || '-' %></td>
+                   <td>
+    <form action="/admin/toggle-user-status/<%= user.id %>" method="POST">
+        <button 
+            type="submit" 
+            style="border:none; background:none; cursor:pointer;"
+        >
+            <span class="status <%= user.is_active ? 'active' : 'inactive' %>">
+                <%= user.is_active ? 'Active' : 'Inactive' %>
+            </span>
+        </button>
+    </form>
+</td>
                 </tr>
             <% }) %>
 

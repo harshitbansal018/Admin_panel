@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publishers</title>
+    <link rel="stylesheet" href="/publisher.css">
+</head>
+<body>
+
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Publisher Name</th>
+                <th>Total Movies</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% if (publishers && publishers.length > 0) { %>
+
+                <% publishers.forEach(function(publisher) { %>
+                    <tr>
+                        <td><%= publisher.name %></td>
+
+                        <td><%= publisher.total_movies || 0 %></td>
+
+                        <td><%= publisher.created_at || '-' %></td>
+                    </tr>
+                <% }) %>
+
+            <% } else { %>
+
+                <tr>
+                    <td colspan="3">No publishers found</td>
+                </tr>
+
+            <% } %>
+        </tbody>
+    </table>
+
+</body>
+</html>

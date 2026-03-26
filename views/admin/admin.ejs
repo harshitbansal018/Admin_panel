@@ -82,6 +82,7 @@
                         currentPage === 'publishers' ? 'Publisher List' :
                         currentPage === 'users' ? 'User List' :
                         currentPage === 'movie-types' ? 'Movie Types' :
+                        currentPage === 'publisher' ? 'Publisher List' :
                         'Admin Panel' %>
                 </h1>
             </div>
@@ -108,7 +109,7 @@
                     <%- include('movieType') %>
                 <% } %>
 
-                <% if (currentPage === 'publishers') { %>
+                <% if (currentPage === 'publisher') { %>
                     <%- include('publisher') %>
                 <% } %>
 

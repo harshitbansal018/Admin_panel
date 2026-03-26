@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <link rel="stylesheet" href="/movies.css">
+</head>
+
+<body>
+    <h2>Movie List</h2>
+    <table class="movie-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Theme</th>
+                <th>Type</th>
+                <th>Publisher</th>
+                <th>Expire Date</th>
+                <th>Publish Date</th>
+                <th>Actions</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (movies.length> 0) { %>
+                <% movies.forEach(movie=> { %>
+                    <tr>
+                        <td>
+                            <%= movie.title %>
+                        </td>
+                        <td>
+                            <%= movie.theme %>
+                        </td>
+                        <td>
+                            <%= movie.movie_type || movie.type_id %>
+                        </td>
+                        <td>
+                            <%= movie.publisher %>
+                        </td>
+                        <td>
+                            <%= movie.expire_date %>
+                        </td>
+                        <td>
+                            <%= movie.publish_date %>
+                        </td>
+                        <td>
+                            <form action="/admin/delete-movie/<%= movie.id %>" method="POST"
+                                onsubmit="return confirm('Are you sure?');">
+                                <button
+                                    style="background:red; color:white; border:none; padding:5px 10px; cursor:pointer;">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                        <td >
+                          <span class="status  <%= movie.status ? 'active' : 'inactive' %>">
+                            <%= movie.status ? 'Active' : 'Inactive' %>
+                        </span>
+                        </td>
+                    </tr>
+                    <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6">No movies found</td>
+                            </tr>
+                            <% } %>
+        </tbody>
+    </table>
+</body>
+
+</html>

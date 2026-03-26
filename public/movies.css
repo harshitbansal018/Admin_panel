@@ -65,6 +65,18 @@ h2 {
     font-style: italic;
     color: #888;
 }
+.status {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #fff;
+}
+.status.active {
+    background-color: #27ae60;
+}
+.status.inactive {
+    background-color: #e74c3c;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
