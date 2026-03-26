@@ -1,0 +1,102 @@
+{
+  "movie_types": [
+    {
+      "id": 2,
+      "type_name": "Drama",
+      "created_at": "2026-03-25 08:51:16",
+      "status": "active"
+    }
+  ],
+  "movies": [
+    {
+      "id": 23,
+      "title": "Interstellar",
+      "type_id": 2,
+      "created_at": "2026-03-26 07:09:37",
+      "theme": "Space Drama",
+      "expire_date": "2026-11-20",
+      "publisher": "Paramount",
+      "publish_date": "2024-03-05",
+      "status": "active",
+      "publisher_id": 1
+    },
+    {
+      "id": 24,
+      "title": "Titanic",
+      "type_id": 2,
+      "created_at": "2026-03-26 07:09:37",
+      "theme": "Romantic Drama",
+      "expire_date": "2026-08-10",
+      "publisher": "Fox",
+      "publish_date": "2024-02-01",
+      "status": "active",
+      "publisher_id": null
+    },
+    {
+      "id": 25,
+      "title": "Joker",
+      "type_id": 2,
+      "created_at": "2026-03-26 07:09:37",
+      "theme": "Psychological Drama",
+      "expire_date": "2026-07-15",
+      "publisher": "Warner Bros",
+      "publish_date": "2024-03-12",
+      "status": "inactive",
+      "publisher_id": 3
+    },
+    {
+      "id": 26,
+      "title": "The Pursuit of Happyness",
+      "type_id": 2,
+      "created_at": "2026-03-26 07:09:37",
+      "theme": "Inspirational Drama",
+      "expire_date": "2026-06-30",
+      "publisher": "Columbia",
+      "publish_date": "2024-05-01",
+      "status": "active",
+      "publisher_id": null
+    },
+    {
+      "id": 27,
+      "title": "Forrest Gump",
+      "type_id": 2,
+      "created_at": "2026-03-26 07:09:37",
+      "theme": "Classic Drama",
+      "expire_date": "2026-12-01",
+      "publisher": "Paramount",
+      "publish_date": "2024-06-01",
+      "status": "active",
+      "publisher_id": 1
+    }
+  ],
+  "publishers": [
+    { "id": 1, "name": "Paramount", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 2, "name": "Columbia Pictures", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 3, "name": "Warner Bros", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 4, "name": "20th Century Fox", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 5, "name": "Universal Pictures", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 6, "name": "Sony Pictures", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 7, "name": "Lionsgate", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 8, "name": "MGM", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 9, "name": "DreamWorks Pictures", "total_movies": 0, "created_at": "2026-03-26 09:02:09" },
+    { "id": 10, "name": "Pixar Animation Studios", "total_movies": 0, "created_at": "2026-03-26 09:02:09" }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "unique21774417009126@x.com",
+      "password": "abc",
+      "is_active": 0,
+      "created_at": "2026-03-25 05:36:49",
+      "name": "x"
+    },
+    {
+      "id": 2,
+      "email": "harshitbansal9@gmail.com",
+      "password": "$2b$10$c9yOxLYsGxom.xMJrhyHL.8inDiQy/b426u164MMrHuyC27GKtoVO",
+      "is_active": 1,
+      "created_at": "2026-03-25 07:04:43",
+      "name": "Harshit Bansal"
+    }
+  ]
+}

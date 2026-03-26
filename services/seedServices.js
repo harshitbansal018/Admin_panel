@@ -34,8 +34,8 @@ exports.importData = async () => {
   }
 
   for (let m of data.movies) {
-    await db.query(
-      `INSERT INTO movies 
+    await db.query(`
+       INSERT IGNORE INTO movies 
       (id, title, type_id, theme, expire_date, publish_date, status, publisher_id)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [

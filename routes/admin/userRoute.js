@@ -14,6 +14,13 @@ router.post('/signup', userController.postSignup);
 
 // 📄 User List (PROTECTED ✅)
 router.get('/users', isAuth, userController.getUsers);
+router.get('/check-session', (req, res) => {
+  if (!req.session || !req.session.user) {
+    return res.status(401).send("Session expired");
+  }
+
+  res.status(200).send("Active");
+});
 
 // 🔄 Toggle User Status (ADD THIS ✅)
 router.post('/toggle-user-status/:id', isAuth, userController.toggleUserStatus);

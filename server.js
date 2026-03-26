@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
-
 const db = require('./config/db'); // DB connection
 const userRoutes = require('./routes/admin/userRoute'); // Routes
 const movieTypeRoutes = require('./routes/admin/movietypeRoute'); // Movie type routes
@@ -14,7 +13,6 @@ const PORT = process.env.PORT || 3000;
 const initDB = require('./utils/dbInit');
 const { importData } = require('./services/seedServices');
 const fs = require('fs');
-
 initDB();
 
 // Auto load JSON
@@ -28,7 +26,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
    cookie: {
-        maxAge: 60 * 60 * 1000  // ⏰ 10 minutes
+        maxAge: 1 * 60 * 1000  // ⏰ 10 minutes
     }
 }));
 // 🧱 MIDDLEWARE

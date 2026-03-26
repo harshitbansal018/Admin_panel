@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const userModel = require("../../model/admin/userModel");
 
 const userController = {
-
   // 🔐 Show Login Page
   getLogin: (req, res) => {
     res.render("login", { error: null, success: null });
@@ -29,12 +28,12 @@ const userController = {
         });
       }
       // 🚫 Block inactive users
-if (!user.is_active) {
-  return res.render("login", {
-    error: "Your account is inactive. Contact admin.",
-    success: null,
-  });
-}
+      if (!user.is_active) {
+        return res.render("login", {
+          error: "Your account is inactive. Contact admin.",
+          success: null,
+        });
+      }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
@@ -53,7 +52,6 @@ if (!user.is_active) {
       };
 
       res.redirect("/admin/dashboard");
-
     } catch (err) {
       console.error(err);
       res.render("login", {
@@ -97,7 +95,6 @@ if (!user.is_active) {
         error: null,
         success: "Signup successful! Please login.",
       });
-
     } catch (err) {
       console.error(err);
       res.render("signup", {
@@ -112,13 +109,12 @@ if (!user.is_active) {
     try {
       const users = await userModel.getAllUsers();
 
-      res.render("admin", {   // ✅ fix based on your views/admin setup
+      res.render("admin", {
+        // ✅ fix based on your views/admin setup
         activePage: "users",
         user: req.session.user,
-        users
+        users,
       });
-
-
     } catch (err) {
       console.error(err);
       res.send("Error fetching users");
@@ -141,25 +137,22 @@ if (!user.is_active) {
     const id = req.params.id;
 
     try {
-        const user = await userModel.getUserById(id);
+      const user = await userModel.getUserById(id);
 
-        if (!user) {
-            return res.send('User not found');
-        }
+      if (!user) {
+        return res.send("User not found");
+      }
 
-        const newStatus = user.is_active ? 0 : 1;
+      const newStatus = user.is_active ? 0 : 1;
 
-        await userModel.updateUserStatus(id, newStatus);
+      await userModel.updateUserStatus(id, newStatus);
 
-        res.redirect('/admin/users');
-
+      res.redirect("/admin/users");
     } catch (err) {
-        console.error(err);
-        res.send('Error updating user status');
+      console.error(err);
+      res.send("Error updating user status");
     }
-}
-
+  },
 };
-
 
 module.exports = userController;
