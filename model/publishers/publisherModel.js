@@ -8,9 +8,9 @@ exports.findByEmail = async (email) => {
   return rows[0];
 };
 
-exports.createPublisher = async (username, email, password) => {
+exports.createPublisher = async (name,username, email, password) => {
   await db.query(
-    "INSERT INTO publishers (name, username, email, password) VALUES (?, ?, ?, ?)",
-    [username, username, email, password]
+    "INSERT INTO publishers (name,username, email, password) VALUES ( ?, ?, ?, ?)",
+    [name,username, email, password]
   );
 };

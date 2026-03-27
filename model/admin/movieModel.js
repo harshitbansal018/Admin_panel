@@ -2,9 +2,15 @@ const db = require('../../config/db');
 exports.getAllMovies = async () => {
     try {
         const [movies] = await db.query(`
-            SELECT m.*, mt.type_name AS movie_type
+            SELECT 
+                m.*,
+                mt.type_name AS movie_type,
+                p.name AS publisher_name   -- ✅ added
             FROM movies m
-            LEFT JOIN movie_types mt ON m.type_id = mt.id
+            LEFT JOIN movie_types mt 
+                ON m.type_id = mt.id
+            LEFT JOIN publishers p       -- ✅ added
+                ON m.publisher_id = p.id
             ORDER BY m.id DESC
         `);
 
@@ -14,7 +20,6 @@ exports.getAllMovies = async () => {
         console.error('Error in getAllMovies:', err);
         throw err;
     }
-                            
 };
 exports.deleteMovie = async (id) => {
     return await db.query(

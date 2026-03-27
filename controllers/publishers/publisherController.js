@@ -45,11 +45,16 @@ let { email, password } = req.body;
   }
 
   // ✅ Store session (clean & minimal)
-  req.session.user = {
+  req.session.publisher = {
     id: publisher.id,
     username: publisher.username,
     role: "publisher",
+
   };
+  console.log("LOGIN HIT");
+console.log("BODY:", req.body);
+console.log("SESSION:", req.session);
+// console.log("SESSION:", req.session);
 
   return res.redirect("/publisher/dashboard");
 
@@ -71,16 +76,17 @@ res.render("publishers/signup", { error: null, success: null });
 // 📝 Handle Signup
 postSignup: async (req, res) => {
 try {
-let { username, email, password } = req.body;
+let { name,username, email, password } = req.body;
 
 
   // 🔹 Trim & normalize
+  name = name?.trim();
   username = username?.trim();
   email = email?.trim().toLowerCase();
   password = password?.trim();
 
   // 🔹 Validation
-  if (!username || !email || !password) {
+  if (!name || !username || !email || !password) {
     return res.render("publishers/signup", {
       error: "All fields are required",
       success: null,
@@ -101,7 +107,7 @@ let { username, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // ✅ Save publisher
-  await publisherModel.createPublisher(username, email, hashedPassword);
+  await publisherModel.createPublisher(name, username, email, hashedPassword);
 
   return res.render("publishers/login", {
     error: null,
@@ -121,18 +127,9 @@ let { username, email, password } = req.body;
 
 // 🚪 Logout
 logout: (req, res) => {
-req.session.destroy((err) => {
-if (err) {
-console.error("Logout Error:", err);
-return res.redirect("/publisher/login");
-}
-
-
+  req.session.publisher = null;   // ✅ only remove publisher session
   res.clearCookie("connect.sid");
   return res.redirect("/publisher/login");
-});
-
-
 }
 
 };

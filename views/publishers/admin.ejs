@@ -15,12 +15,12 @@
         <div class="sidebar-header">
             <h2>Publisher Panel</h2>
 
-            <% if (user && user.username) { %>
+            <% if (publisher) { %>
                 <div class="user-avatar">
-                    <%= user.username.charAt(0).toUpperCase() %>
+                    <%= publisher.username.charAt(0).toUpperCase() %>
                 </div>
                 <div class="user-name">
-                    <%= user.username %>
+                    <%= publisher.username %>
                 </div>
             <% } %>
         </div>

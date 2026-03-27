@@ -5,14 +5,14 @@ const moviesController = {
     // 🎬 Show Publisher Movies
     getMovies: async (req, res) => {
         try {
-            const publisherId = req.session.user.id;
+            const publisherId = req.session.publisher.id;
 
             const movies = await moviesModel.getMoviesByPublisher(publisherId);
 
             res.render('publishers/admin', {
                 activePage: 'movies',
                 movies: movies,
-                user: req.session.user
+                user: req.session.publisher
             });
 
         } catch (err) {

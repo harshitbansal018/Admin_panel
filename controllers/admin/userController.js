@@ -45,10 +45,11 @@ const userController = {
       }
 
       // Store session
-      req.session.user = {
+      req.session.admin = {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: "admin",
       };
 
       res.redirect("/admin/dashboard");
@@ -112,7 +113,7 @@ const userController = {
       res.render("admin/admin", {
         // ✅ fix based on your views/admin setup
         activePage: "users",
-        user: req.session.user,
+        user: req.session.admin,
         users,
       });
     } catch (err) {
@@ -122,16 +123,9 @@ const userController = {
   },
 
   // 🚪 Logout
-  logout: (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        console.log(err);
-        return res.redirect("/admin/login");
-      }
-
-      res.clearCookie("connect.sid");
-      return res.redirect("/admin/login");
-    });
+logout: (req, res) => {
+  req.session.admin = null;   // ✅ only remove publisher session
+    return res.redirect("/admin/login");
   },
   toggleUserStatus: async (req, res) => {
     const id = req.params.id;

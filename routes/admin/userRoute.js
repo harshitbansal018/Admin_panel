@@ -15,7 +15,7 @@ router.post('/signup', userController.postSignup);
 // 📄 User List (PROTECTED ✅)
 router.get('/users', isAuth, userController.getUsers);
 router.get('/check-session', (req, res) => {
-  if (!req.session || !req.session.user) {
+  if (!req.session || !req.session.admin) {
     return res.status(401).send("Session expired");
   }
 

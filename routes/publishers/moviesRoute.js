@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-
+const {isPublisher} = require('../../middleware/auth');
 const moviesController = require('../../controllers/publishers/moviesController');
-const { isAuth } = require('../../middleware/auth');
 
 // 🎬 Movies list
-router.get('/movies', isAuth, moviesController.getMovies);
+router.get('/movies', isPublisher, moviesController.getMovies);
 
 // // ➕ Add movie
 // router.get('/add-movie', isAuth, moviesController.getAddMovie);

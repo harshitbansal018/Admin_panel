@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th>Publisher Name</th>
+                <th>Email</th>
                 <th>Total Movies</th>
                 <th>Created At</th>
             </tr>
@@ -24,7 +25,10 @@
                     <tr>
                         <td><%= publisher.name %></td>
 
+                          <td><%= publisher.email || 0 %></td>
+
                         <td><%= publisher.total_movies || 0 %></td>
+                        
 
                         <td><%= publisher.created_at || '-' %></td>
                     </tr>
