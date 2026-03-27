@@ -7,7 +7,7 @@ const movieController = {
         try {
           
             const movies = await movieModel.getAllMovies();
-            res.render('admin', {
+            res.render('admin/admin', {
                 activePage: 'movies',
                 movies: movies
             });
@@ -48,8 +48,5 @@ deleteMovie: async (req, res) => {
         res.send('Error deleting movie');
     }
 }
-
-
 };
-
 module.exports = movieController;

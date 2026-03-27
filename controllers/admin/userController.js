@@ -4,7 +4,7 @@ const userModel = require("../../model/admin/userModel");
 const userController = {
   // 🔐 Show Login Page
   getLogin: (req, res) => {
-    res.render("login", { error: null, success: null });
+    res.render("admin/login", { error: null, success: null });
   },
 
   // 🔐 Handle Login
@@ -13,7 +13,7 @@ const userController = {
 
     try {
       if (!email || !password) {
-        return res.render("login", {
+        return res.render("admin/login", {
           error: "All fields are required",
           success: null,
         });
@@ -22,14 +22,14 @@ const userController = {
       const user = await userModel.findByEmail(email);
 
       if (!user) {
-        return res.render("login", {
+        return res.render("admin/login", {
           error: "User not found",
           success: null,
         });
       }
       // 🚫 Block inactive users
       if (!user.is_active) {
-        return res.render("login", {
+        return res.render("admin/login", {
           error: "Your account is inactive. Contact admin.",
           success: null,
         });
@@ -38,7 +38,7 @@ const userController = {
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.render("login", {
+        return res.render("admin/login", {
           error: "Invalid password",
           success: null,
         });
@@ -54,7 +54,7 @@ const userController = {
       res.redirect("/admin/dashboard");
     } catch (err) {
       console.error(err);
-      res.render("login", {
+      res.render("admin/login", {
         error: "Login failed",
         success: null,
       });
@@ -63,7 +63,7 @@ const userController = {
 
   // 📝 Show Signup Page
   getSignup: (req, res) => {
-    res.render("signup", { error: null, success: null });
+    res.render("admin/signup", { error: null, success: null });
   },
 
   // 📝 Handle Signup
@@ -72,7 +72,7 @@ const userController = {
 
     try {
       if (!name || !email || !password) {
-        return res.render("signup", {
+        return res.render("admin/signup", {
           error: "All fields are required",
           success: null,
         });
@@ -81,7 +81,7 @@ const userController = {
       const existingUser = await userModel.findByEmail(email);
 
       if (existingUser) {
-        return res.render("signup", {
+        return res.render("admin/signup", {
           error: "Email already exists",
           success: null,
         });
@@ -91,13 +91,13 @@ const userController = {
 
       await userModel.createUser(name, email, hashedPassword);
 
-      res.render("login", {
+      res.render("admin/login", {
         error: null,
         success: "Signup successful! Please login.",
       });
     } catch (err) {
       console.error(err);
-      res.render("signup", {
+      res.render("admin/signup", {
         error: "Signup failed",
         success: null,
       });
@@ -109,7 +109,7 @@ const userController = {
     try {
       const users = await userModel.getAllUsers();
 
-      res.render("admin", {
+      res.render("admin/admin", {
         // ✅ fix based on your views/admin setup
         activePage: "users",
         user: req.session.user,

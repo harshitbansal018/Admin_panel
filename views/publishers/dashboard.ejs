@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publisher Dashboard</title>
+<link rel="stylesheet" href="/publishers/dashboard.css">
+</head>
+<body>
+<div class="dashboard">
+    <h1>🎬 Publisher Dashboard</h1>
+
+    <div class="card-container">
+
+        <!-- Total Movies -->
+        <div class="card movies">
+            <h3>Total Movies</h3>
+            <div class="count">
+                <%= typeof totalMovies !== 'undefined' ? totalMovies : 0 %>
+            </div>
+        </div>
+
+        <!-- In Progress -->
+        <div class="card movies">
+            <h3>Active</h3>
+            <div class="count">
+                <%= typeof inProgress !== 'undefined' ? inProgress : 0 %>
+            </div>
+        </div>
+
+        <!-- Rejected -->
+        <div class="card movies">
+            <h3>Rejected</h3>
+            <div class="count">
+                <%= typeof rejected !== 'undefined' ? rejected : 0 %>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+</html>

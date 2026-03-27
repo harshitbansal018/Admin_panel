@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publisher Panel</title>
+    <link rel="stylesheet" href="/publishers/admin.css">
+</head>
+
+<body>
+    <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Publisher Panel</h2>
+
+            <% if (user && user.username) { %>
+                <div class="user-avatar">
+                    <%= user.username.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-name">
+                    <%= user.username %>
+                </div>
+            <% } %>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+
+                <li>
+                    <a href="/publisher/dashboard"
+                       class="nav-link <%= activePage === 'dashboard' ? 'active' : '' %>">
+                       Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/publisher/movies"
+                       class="nav-link <%= activePage === 'movies' ? 'active' : '' %>">
+                       Movie List
+                    </a>
+                </li>
+
+                <!-- <li>
+                    <a href="/publisher/add-movie"
+                       class="nav-link <%= activePage === 'add-movie' ? 'active' : '' %>">
+                       Add Movie
+                    </a>
+                </li> -->
+
+                <li class="nav-item">
+                    <a href="/publisher/logout" class="nav-link">Logout</a>
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <% const currentPage = activePage || 'dashboard'; %>
+
+        <div class="content-header">
+            <h1>
+                <%= currentPage === 'dashboard' ? 'Dashboard' :
+                    currentPage === 'movies' ? 'Movie List' :
+                    <!-- currentPage === 'add-movie' ? 'Add Movie' : -->
+                    'Publisher Panel' %>
+            </h1>
+        </div>
+
+        <div class="content-body">
+
+            <% if (currentPage === 'dashboard') { %>
+               <%- include('dashboard', {
+    totalMovies: totalMovies,
+    inProgress: inProgress,
+    rejected: rejected
+}) %>
+            <% } %>
+
+            <% if (currentPage === 'movies') { %>
+                <%- include('movieList', { movies: movies }) %>
+            <% } %>
+
+            <% if (currentPage === 'add-movie') { %>
+                <%- include('add-movie') %>
+            <% } %>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    setInterval(async () => {
+        const res = await fetch('/publisher/check-session');
+
+        if (res.status === 401) {
+            alert("Session expired. Please login again.");
+            window.location.href = '/publisher/login';
+        }
+    }, 5000);
+</script>
+
+</body>
+</html>

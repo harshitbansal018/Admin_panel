@@ -1,13 +1,12 @@
 const movieTypeModel = require('../../model/admin/movieTypeModel');
 
 const movieTypeController = {
-
     // Get all movie types
     getMovieTypes: async (req, res) => {
         try {
             const types = await movieTypeModel.getAllTypes();
 
-            res.render('admin', {   // ✅ based on your views/admin setup
+            res.render('admin/admin', {   // ✅ based on your views/admin setup
                 activePage: 'movie-types',
                 types
             });

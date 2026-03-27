@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/publishers/movieList.css">
+</head>
+<body>
+    <div class="movies-container">
+    <h2>🎬 My Movies</h2>
+
+    <% if (movies && movies.length > 0) { %>
+
+        <table class="movie-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Theme</th>
+                    <th>Status</th>
+                    <th>Publish Date</th>
+                    <th>Expire Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% movies.forEach(movie => { %>
+                    <tr>
+                        <td><%= movie.title %></td>
+                        <td><%= movie.theme %></td>
+
+                        <td>
+                            <% if (movie.status === 'active') { %>
+                                <span class="status active">Active</span>
+                            <% } else { %>
+                                <span class="status inactive">Rejected</span>
+                            <% } %>
+                        </td>
+
+                        <td><%= movie.publish_date %></td>
+                        <td><%= movie.expire_date %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+    <% } else { %>
+
+        <p>No movies found for your account 🎬</p>
+
+    <% } %>
+    </div>
+</body>
+</html>

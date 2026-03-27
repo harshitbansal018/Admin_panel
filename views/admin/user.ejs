@@ -1,56 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Types</title>
-    <link rel="stylesheet" href="/user.css">
+    <link rel="stylesheet" href="/admin/user.css">
 </head>
+
 <body>
     <h2>User List</h2>
 
-<table class="user-table">
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Created At</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <% if (users && users.length > 0) { %>
-
-            <% users.forEach(function(user) { %>
-                <tr>
-                    <td><%= user.email %></td>
-                    <td><%= user.name %></td>
-                    <td><%= user.created_at || '-' %></td>
-                   <td>
-    <form action="/admin/toggle-user-status/<%= user.id %>" method="POST">
-        <button 
-            type="submit" 
-            style="border:none; background:none; cursor:pointer;"
-        >
-            <span class="status <%= user.is_active ? 'active' : 'inactive' %>">
-                <%= user.is_active ? 'Active' : 'Inactive' %>
-            </span>
-        </button>
-    </form>
-</td>
-                </tr>
-            <% }) %>
-
-        <% } else { %>
-
+    <table class="user-table">
+        <thead>
             <tr>
-                <td colspan="4">No users found</td>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Created At</th>
+                <th>Status</th>
             </tr>
+        </thead>
 
-        <% } %>
-    </tbody>
-</table>
+        <tbody>
+            <% if (users && users.length> 0) { %>
+
+                <% users.forEach(function(user) { %>
+                    <tr>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <%= user.name %>
+                        </td>
+                        <td>
+                            <%= user.created_at || '-' %>
+                        </td>
+                        <td>
+                            <form action="/admin/toggle-user-status/<%= user.id %>" method="POST">
+                                <button type="submit" style="border:none; background:none; cursor:pointer;">
+                                    <span class="status <%= user.is_active ? 'active' : 'inactive' %>">
+                                        <%= user.is_active ? 'Active' : 'Inactive' %>
+                                    </span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }) %>
+
+                        <% } else { %>
+
+                            <tr>
+                                <td colspan="4">No users found</td>
+                            </tr>
+
+                            <% } %>
+        </tbody>
+    </table>
 
 </body>
+
 </html>

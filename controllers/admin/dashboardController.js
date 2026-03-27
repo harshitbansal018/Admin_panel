@@ -5,7 +5,7 @@ exports.getDashboard = async (req, res) => {
         // calling the function from model folder of database query
        const counts= await dashboardModel.getCounts();
 
-        res.render('admin', {
+        res.render('admin/admin', {
             activePage: 'dashboard',
             totalMovies: counts.totalMovies,
             totalUsers: counts.totalUsers,

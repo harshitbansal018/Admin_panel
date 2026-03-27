@@ -8,7 +8,7 @@ const publisherController = {
         try {
             const publishers = await publisherModel.getAllPublishers(); // ✅ FIXED
 
-            res.render('admin', {
+            res.render('admin/admin', {
                 activePage: 'publisher',
                 publishers: publishers
             });

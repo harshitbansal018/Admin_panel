@@ -3,15 +3,21 @@ const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 const db = require('./config/db'); // DB connection
+// Dashboard route
 const userRoutes = require('./routes/admin/userRoute'); // Routes
 const movieTypeRoutes = require('./routes/admin/movietypeRoute'); // Movie type routes
 const movieRoutes = require('./routes/admin/moviesRoutes'); // Movie routes
-const dashboardRoute = require('./routes/admin/dashboardRoute'); // Dashboard route
-const publisherRoute = require('./routes/admin/publisherRoute'); // Publisher route
+const dashboardRoute = require('./routes/admin/dashboardRoute'); 
+const publisherRoutes = require('./routes/admin/publisherRoute');
+// Publisher route
+const publisherdashboardRoute = require('./routes/publishers/dashboardRoute'); 
+const publisherAuthRoutes = require('./routes/publishers/publisherRoute');
+const publisherMoviesRoutes = require('./routes/publishers/moviesRoute');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const initDB = require('./utils/dbInit');
 const { importData } = require('./services/seedServices');
+
 const fs = require('fs');
 initDB();
 
@@ -26,7 +32,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
    cookie: {
-        maxAge: 1 * 60 * 1000  // ⏰ 10 minutes
+        maxAge: 60 * 60 * 1000  // ⏰ 10 minutes
     }
 }));
 // 🧱 MIDDLEWARE
@@ -44,7 +50,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 🎨 VIEW ENGINE
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views/admin'));
+app.set('views', path.join(__dirname, 'views'));
+
 // 👤 GLOBAL USER (IMPORTANT)
 
 app.use((req, res, next) => {
@@ -58,12 +65,17 @@ app.use('/admin', userRoutes);
 app.use('/admin', movieTypeRoutes);
 app.use('/admin', movieRoutes);
 app.use('/admin', dashboardRoute);
-app.use('/admin', publisherRoute);
+app.use('/admin', publisherRoutes);
+
+
+app.use('/publisher',publisherAuthRoutes);
+app.use('/publisher', publisherdashboardRoute);
+app.use('/publisher', publisherMoviesRoutes);
 
 // 🔁 DEFAULT ROUTE
 
 app.get('/', (req, res) => {
-    res.redirect('/admin/login');
+    res.render("publishers/login", { error: null, success: null });
 });
 
 // ❌ 404 HANDLER
