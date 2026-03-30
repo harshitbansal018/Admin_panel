@@ -2,12 +2,13 @@ const bcrypt = require("bcrypt");
 const userModel = require("../../model/admin/userModel");
 
 const userController = {
+
   // 🔐 Show Login Page
   getLogin: (req, res) => {
     res.render("admin/login", { error: null, success: null });
   },
 
-  // 🔐 Handle Login
+  // 🔐 Handle Login (ROLE BASED)
   postLogin: async (req, res) => {
     const { email, password } = req.body;
 
@@ -27,14 +28,16 @@ const userController = {
           success: null,
         });
       }
-      // 🚫 Block inactive users
+
+      // 🚫 Check active
       if (!user.is_active) {
         return res.render("admin/login", {
-          error: "Your account is inactive. Contact admin.",
+          error: "Account inactive. Contact admin.",
           success: null,
         });
       }
 
+      // 🔐 Password check
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
@@ -44,15 +47,26 @@ const userController = {
         });
       }
 
-      // Store session
-      req.session.admin = {
+      // ✅ Store session (IMPORTANT CHANGE)
+      req.session.user = {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: "admin",
+        role: user.role, // 🔥 dynamic role
       };
 
-      res.redirect("/admin/dashboard");
+      // 🔥 ROLE BASED REDIRECT
+      if (user.role === "admin") {
+        return res.redirect("/admin/dashboard");
+      } else if (user.role === "publisher") {
+        return res.redirect("/publisher/dashboard");
+      } else {
+        return res.render("admin/login", {
+          error: "Invalid role assigned",
+          success: null,
+        });
+      }
+
     } catch (err) {
       console.error(err);
       res.render("admin/login", {
@@ -62,12 +76,11 @@ const userController = {
     }
   },
 
-  // 📝 Show Signup Page
+  // 📝 Signup (Default role = publisher)
   getSignup: (req, res) => {
     res.render("admin/signup", { error: null, success: null });
   },
 
-  // 📝 Handle Signup
   postSignup: async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -90,12 +103,14 @@ const userController = {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      await userModel.createUser(name, email, hashedPassword);
+      // ✅ Default role = publisher
+      await userModel.createUser(name, email, hashedPassword, "publisher");
 
       res.render("admin/login", {
         error: null,
         success: "Signup successful! Please login.",
       });
+
     } catch (err) {
       console.error(err);
       res.render("admin/signup", {
@@ -105,17 +120,17 @@ const userController = {
     }
   },
 
-  // 👥 Get Users
+  // 👥 Get Users (Admin only)
   getUsers: async (req, res) => {
     try {
       const users = await userModel.getAllUsers();
 
       res.render("admin/admin", {
-        // ✅ fix based on your views/admin setup
         activePage: "users",
-        user: req.session.admin,
+        user: req.session.user,
         users,
       });
+
     } catch (err) {
       console.error(err);
       res.send("Error fetching users");
@@ -123,10 +138,12 @@ const userController = {
   },
 
   // 🚪 Logout
-logout: (req, res) => {
-  req.session.admin = null;   // ✅ only remove publisher session
+  logout: (req, res) => {
+    req.session.destroy();   // ✅ better than null
     return res.redirect("/admin/login");
   },
+
+  // 🔁 Toggle Active Status
   toggleUserStatus: async (req, res) => {
     const id = req.params.id;
 
@@ -142,6 +159,7 @@ logout: (req, res) => {
       await userModel.updateUserStatus(id, newStatus);
 
       res.redirect("/admin/users");
+
     } catch (err) {
       console.error(err);
       res.send("Error updating user status");

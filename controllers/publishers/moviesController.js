@@ -3,24 +3,28 @@ const moviesModel = require('../../model/publishers/moviesModel');
 const moviesController = {
 
     // 🎬 Show Publisher Movies
-    getMovies: async (req, res) => {
-        try {
-            const publisherId = req.session.publisher.id;
-
-            const movies = await moviesModel.getMoviesByPublisher(publisherId);
-
-            res.render('publishers/admin', {
-                activePage: 'movies',
-                movies: movies,
-                user: req.session.publisher
-            });
-
-        } catch (err) {
-            console.error(err);
-            res.send("Error loading movies");
+getMovies: async (req, res) => {
+    try {
+        if (!req.session?.user) {
+            console.log("❌ SESSION MISSING");
+            return res.redirect("/admin/login");
         }
-    },
 
+        const publisherId = req.session.user.id;
+
+        const movies = await moviesModel.getMoviesByPublisher(publisherId);
+
+        res.render('publishers/admin', {
+            activePage: 'movies',
+            movies,
+            user: req.session.user
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.send("Error loading movies");
+    }
+}
 
     // // ➕ Show Add Movie Page
     // getAddMovie: (req, res) => {

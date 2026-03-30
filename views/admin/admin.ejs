@@ -16,12 +16,12 @@
             <div class="sidebar-header">
                 <h2>Admin Panel</h2>
 
-                <% if (admin) { %>
+                <% if (user && user.role === 'admin') { %>
                     <div class="user-avatar">
-                        <%= admin.name.charAt(0).toUpperCase() %>
+                        <%= user.name.charAt(0).toUpperCase() %>
                     </div>
                     <div class="user-name">
-                        <%= admin.name %>
+                        <%= user.name %>
                     </div>
                 <% } %>
             </div>

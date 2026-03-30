@@ -1,137 +1,127 @@
 const bcrypt = require("bcrypt");
-const publisherModel = require("../../model/publishers/publisherModel");
+const userModel = require("../../model/admin/userModel");
 
 const publisherController = {
 
-// 🔐 Show Login Page
-getLogin: (req, res) => {
-res.render("publishers/login", { error: null, success: null });
-},
+  // 🔐 Show Login
+  getLogin: (req, res) => {
+    res.render("publishers/login", { error: null, success: null });
+  },
 
-// 🔐 Handle Login
-postLogin: async (req, res) => {
-try {
-let { email, password } = req.body;
+  // 🔐 Handle Login (ONLY PUBLISHER)
+  postLogin: async (req, res) => {
+    try {
+      let { email, password } = req.body;
 
+      email = email?.trim().toLowerCase();
+      password = password?.trim();
 
-  // 🔹 Trim & normalize
-  email = email?.trim().toLowerCase();
-  password = password?.trim();
+      if (!email || !password) {
+        return res.render("publishers/login", {
+          error: "All fields are required",
+          success: null,
+        });
+      }
 
-  // 🔹 Validation
-  if (!email || !password) {
-    return res.render("publishers/login", {
-      error: "All fields are required",
-      success: null,
-    });
-  }
+      const user = await userModel.findByEmail(email);
 
-  const publisher = await publisherModel.findByEmail(email);
+      // ❌ Not found OR not publisher
+      if (!user || user.role !== "publisher") {
+        return res.render("publishers/login", {
+          error: "Publisher not found",
+          success: null,
+        });
+      }
 
-  if (!publisher) {
-    return res.render("publishers/login", {
-      error: "Publisher not found",
-      success: null,
-    });
-  }
+      // 🚫 inactive check
+      if (!user.is_active) {
+        return res.render("publishers/login", {
+          error: "Account inactive",
+          success: null,
+        });
+      }
 
-  const isMatch = await bcrypt.compare(password, publisher.password);
+      const isMatch = await bcrypt.compare(password, user.password);
 
-  if (!isMatch) {
-    return res.render("publishers/login", {
-      error: "Invalid password",
-      success: null,
-    });
-  }
+      if (!isMatch) {
+        return res.render("publishers/login", {
+          error: "Invalid password",
+          success: null,
+        });
+      }
 
-  // ✅ Store session (clean & minimal)
-  req.session.publisher = {
-    id: publisher.id,
-    username: publisher.username,
-    role: "publisher",
+      // ✅ SINGLE SESSION SYSTEM
+      req.session.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      };
 
-  };
-  console.log("LOGIN HIT");
-console.log("BODY:", req.body);
-console.log("SESSION:", req.session);
-// console.log("SESSION:", req.session);
+      return res.redirect("/publisher/dashboard");
 
-  return res.redirect("/publisher/dashboard");
+    } catch (err) {
+      console.error("Publisher Login Error:", err);
+      return res.render("publishers/login", {
+        error: "Login failed",
+        success: null,
+      });
+    }
+  },
 
-} catch (err) {
-  console.error("Login Error:", err);
-  return res.render("publishers/login", {
-    error: "Login failed. Try again.",
-    success: null,
-  });
-}
+  // 📝 Signup
+  getSignup: (req, res) => {
+    res.render("publishers/signup", { error: null, success: null });
+  },
 
-},
+  postSignup: async (req, res) => {
+    try {
+      let { name, email, password } = req.body;
 
-// 📝 Show Signup Page
-getSignup: (req, res) => {
-res.render("publishers/signup", { error: null, success: null });
-},
+      name = name?.trim();
+      email = email?.trim().toLowerCase();
+      password = password?.trim();
 
-// 📝 Handle Signup
-postSignup: async (req, res) => {
-try {
-let { name,username, email, password } = req.body;
+      if (!name || !email || !password) {
+        return res.render("publishers/signup", {
+          error: "All fields are required",
+          success: null,
+        });
+      }
 
+      const existingUser = await userModel.findByEmail(email);
 
-  // 🔹 Trim & normalize
-  name = name?.trim();
-  username = username?.trim();
-  email = email?.trim().toLowerCase();
-  password = password?.trim();
+      if (existingUser) {
+        return res.render("publishers/signup", {
+          error: "Email already exists",
+          success: null,
+        });
+      }
 
-  // 🔹 Validation
-  if (!name || !username || !email || !password) {
-    return res.render("publishers/signup", {
-      error: "All fields are required",
-      success: null,
-    });
-  }
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-  // 🔹 Check existing email
-  const existingPublisher = await publisherModel.findByEmail(email);
+      // ✅ Create as publisher
+      await userModel.createUser(name, email, hashedPassword, "publisher");
 
-  if (existingPublisher) {
-    return res.render("publishers/signup", {
-      error: "Email already exists",
-      success: null,
-    });
-  }
+      return res.render("publishers/login", {
+        error: null,
+        success: "Signup successful! Please login.",
+      });
 
-  // 🔐 Hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
+    } catch (err) {
+      console.error("Publisher Signup Error:", err);
+      return res.render("publishers/signup", {
+        error: "Signup failed",
+        success: null,
+      });
+    }
+  },
 
-  // ✅ Save publisher
-  await publisherModel.createPublisher(name, username, email, hashedPassword);
-
-  return res.render("publishers/login", {
-    error: null,
-    success: "Signup successful! Please login.",
-  });
-
-} catch (err) {
-  console.error("Signup Error:", err);
-  return res.render("publishers/signup", {
-    error: "Signup failed. Try again.",
-    success: null,
-  });
-}
-
-
-},
-
-// 🚪 Logout
-logout: (req, res) => {
-  req.session.publisher = null;   // ✅ only remove publisher session
-  res.clearCookie("connect.sid");
-  return res.redirect("/publisher/login");
-}
-
+  // 🚪 Logout
+  logout: (req, res) => {
+    req.session.destroy();   // ✅ destroy full session
+    return res.redirect("/publisher/login");
+  },
 };
 
 module.exports = publisherController;

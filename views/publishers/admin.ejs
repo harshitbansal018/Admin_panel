@@ -15,12 +15,12 @@
         <div class="sidebar-header">
             <h2>Publisher Panel</h2>
 
-            <% if (publisher) { %>
+            <% if (user && user.role === "publisher") { %>
                 <div class="user-avatar">
-                    <%= publisher.username.charAt(0).toUpperCase() %>
+                    <%= user.name.charAt(0).toUpperCase() %>
                 </div>
                 <div class="user-name">
-                    <%= publisher.username %>
+                    <%= user.name %>
                 </div>
             <% } %>
         </div>
@@ -99,7 +99,7 @@
 
         if (res.status === 401) {
             alert("Session expired. Please login again.");
-            window.location.href = '/publisher/login';
+            window.location.href = '/admin/login';
         }
     }, 5000);
 </script>
