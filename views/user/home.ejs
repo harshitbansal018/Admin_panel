@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Movies</title>
+    <link rel="stylesheet" href="/user/home.css">
+</head>
+
+<body>
+
+<!-- 🔝 NAVBAR -->
+<div class="navbar">
+    <div class="logo">🎬 MyFlix</div>
+
+    <div class="nav-right">
+        <div class="user-avatar">
+            <%= user?.name?.charAt(0).toUpperCase() %>
+        </div>
+        <a href="/user/logout" class="logout-btn">Logout</a>
+    </div>
+</div>
+
+<!-- 🔍 FILTER SECTION -->
+<div class="filter-section">
+
+    <!-- Filter by Type -->
+    <select id="typeFilter">
+        <option value="">All Types</option>
+        <% types.forEach(type => { %>
+            <option value="<%= type.id %>"><%= type.type_name %></option>
+        <% }) %>
+    </select>
+
+    <!-- Filter by Publisher -->
+    <select id="publisherFilter">
+        <option value="">All Publishers</option>
+        <% publishers.forEach(pub => { %>
+            <option value="<%= pub.id %>"><%= pub.name %></option>
+        <% }) %>
+    </select>
+
+    <button onclick="applyFilter()">Apply</button>
+</div>
+
+<!-- 🎬 MOVIES -->
+<h2>Trending Movies</h2>
+
+<div class="movie-row">
+    <% movies.forEach(movie => { %>
+        <div class="movie-card">
+            <img src="/uploads/<%= movie.image || 'default.jpg' %>" alt="movie">
+            <div class="movie-title"><%= movie.title %></div>
+        </div>
+    <% }) %>
+</div>
+
+<!-- 🔥 FILTER SCRIPT -->
+<script>
+function applyFilter() {
+    const type = document.getElementById("typeFilter").value;
+    const publisher = document.getElementById("publisherFilter").value;
+
+    let url = `/user/home?`;
+
+    if (type) url += `type=${type}&`;
+    if (publisher) url += `publisher=${publisher}`;
+
+    window.location.href = url;
+}
+</script>
+
+</body>
+</html>

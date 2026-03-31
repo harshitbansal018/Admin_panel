@@ -1,0 +1,184 @@
+/* 🎬 GLOBAL */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #111;
+    color: #fff;
+}
+
+/* 🔝 NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Logo */
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #e50914;
+}
+
+/* Right section */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 👤 Avatar */
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    background: #e50914;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.user-avatar:hover {
+    background: #b20710;
+    transform: scale(1.1);
+}
+
+/* 🚪 Logout */
+.logout-btn {
+    text-decoration: none;
+    color: white;
+    background: #e50914;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #b20710;
+}
+
+/* 🔍 FILTER SECTION */
+.filter-section {
+    margin: 20px 30px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-section select {
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #1c1c1c;
+    color: white;
+    outline: none;
+    font-size: 14px;
+}
+
+.filter-section button {
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    background: #e50914;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-section button:hover {
+    background: #b20710;
+}
+
+/* 🧾 HEADING */
+h2 {
+    margin: 25px 30px 10px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+/* 🎬 MOVIE ROW */
+.movie-row {
+    display: flex;
+    gap: 18px;
+    padding: 20px 30px;
+    overflow-x: auto;
+}
+
+/* Hide scrollbar */
+.movie-row::-webkit-scrollbar {
+    display: none;
+}
+
+/* 🎥 MOVIE CARD */
+.movie-card {
+    min-width: 180px;
+    background: #1c1c1c;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Hover effect */
+.movie-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    z-index: 10;
+}
+
+/* 🎞 IMAGE */
+.movie-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+/* 🎬 TITLE */
+.movie-title {
+    padding: 12px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .nav-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .movie-card {
+        min-width: 140px;
+    }
+
+    .movie-card img {
+        height: 200px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .filter-section {
+        flex-direction: column;
+    }
+}

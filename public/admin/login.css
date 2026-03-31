@@ -191,3 +191,35 @@ body {
         font-size: 0.95rem;
     }
 }
+/* 🔽 Role Dropdown (MATCHING YOUR THEME) */
+select#role {
+    width: 100%;
+    padding: 12px 14px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #d1dae6;
+    background-color: #ffffff;
+    color: var(--text-primary); /* ✅ FIXED */
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+}
+
+/* Hover */
+select#role:hover {
+    border-color: var(--brand);
+}
+
+/* Focus */
+select#role:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* Options */
+select#role option {
+    background-color: #ffffff;
+    color: var(--text-primary);
+}

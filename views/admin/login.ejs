@@ -9,7 +9,7 @@
 <body>
     <div class="auth-page">
         <div class="auth-card">
-            <h2>Admin Login</h2>
+            <h2>Login</h2>
 
             <% if (typeof error !== 'undefined' && error) { %>
                 <div class="alert alert-error"><%= error %></div>
@@ -28,6 +28,7 @@
 
                 <label for="role">Role</label>
                 <select id="role" name="role">
+                      <option value="user">User</option>
                     <option value="admin">Admin</option>
                     <option value="publisher">Publisher</option>
                 </select>
@@ -38,5 +39,8 @@
             <p>Don't have an account? <a href="/admin/signup">Signup</a></p>
         </div>
     </div>
+    <script>
+
+</script>
 </body>
 </html>

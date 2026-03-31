@@ -8,31 +8,28 @@ const userController = {
     res.render("admin/login", { error: null, success: null });
   },
 
-  // 🔐 Handle Login (ROLE BASED)
+  // 🔐 Handle Login (IMPROVED)
   postLogin: async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password, role } = req.body;
 
     try {
-      if (!email || !password) {
+      // 🔥 Normalize input
+      email = email?.trim().toLowerCase();
+      password = password?.trim();
+
+      if (!email || !password || !role) {
         return res.render("admin/login", {
           error: "All fields are required",
           success: null,
         });
       }
 
-      const user = await userModel.findByEmail(email);
+      // 🔥 Use ACTIVE USER method (better)
+      const user = await userModel.findActiveUserByEmail(email);
 
       if (!user) {
         return res.render("admin/login", {
-          error: "User not found",
-          success: null,
-        });
-      }
-
-      // 🚫 Check active
-      if (!user.is_active) {
-        return res.render("admin/login", {
-          error: "Account inactive. Contact admin.",
+          error: "User not found or inactive",
           success: null,
         });
       }
@@ -47,20 +44,33 @@ const userController = {
         });
       }
 
-      // ✅ Store session (IMPORTANT CHANGE)
+      // 🚨 ROLE VALIDATION
+      if (user.role !== role) {
+        return res.render("admin/login", {
+          error: `You selected "${role}" but your account is "${user.role}"`,
+          success: null,
+        });
+      }
+
+      // ✅ Store session
       req.session.user = {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role, // 🔥 dynamic role
+        role: user.role,
       };
 
-      // 🔥 ROLE BASED REDIRECT
+      // 🔀 Redirect based on role
       if (user.role === "admin") {
         return res.redirect("/admin/dashboard");
-      } else if (user.role === "publisher") {
+      } 
+      else if (user.role === "publisher") {
         return res.redirect("/publisher/dashboard");
-      } else {
+      } 
+      else if (user.role === "user") {
+        return res.redirect("/user/home"); // ✅ USER LOGIN
+      } 
+      else {
         return res.render("admin/login", {
           error: "Invalid role assigned",
           success: null,
@@ -76,15 +86,20 @@ const userController = {
     }
   },
 
-  // 📝 Signup (Default role = publisher)
+  // 📝 Signup Page
   getSignup: (req, res) => {
     res.render("admin/signup", { error: null, success: null });
   },
 
+  // 📝 Signup (FIXED FOR USERS)
   postSignup: async (req, res) => {
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
 
     try {
+      name = name?.trim();
+      email = email?.trim().toLowerCase();
+      password = password?.trim();
+
       if (!name || !email || !password) {
         return res.render("admin/signup", {
           error: "All fields are required",
@@ -92,9 +107,10 @@ const userController = {
         });
       }
 
-      const existingUser = await userModel.findByEmail(email);
+      // 🔥 Better check
+      const exists = await userModel.emailExists(email);
 
-      if (existingUser) {
+      if (exists) {
         return res.render("admin/signup", {
           error: "Email already exists",
           success: null,
@@ -103,8 +119,8 @@ const userController = {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // ✅ Default role = publisher
-      await userModel.createUser(name, email, hashedPassword, "publisher");
+      // 🔥 IMPORTANT CHANGE
+      await userModel.createUser(name, email, hashedPassword, "user"); // ✅ user role
 
       res.render("admin/login", {
         error: null,
@@ -138,10 +154,22 @@ const userController = {
   },
 
   // 🚪 Logout
-  logout: (req, res) => {
-    req.session.destroy();   // ✅ better than null
+logout: (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Logout Error:", err);
+      return res.redirect("/");
+    }
+
+    // 🔥 destroy cookie also
+    res.clearCookie("session_id");
+
+    // 🔥 prevent back button cache
+    res.set("Cache-Control", "no-store");
+
     return res.redirect("/admin/login");
-  },
+  });
+},
 
   // 🔁 Toggle Active Status
   toggleUserStatus: async (req, res) => {

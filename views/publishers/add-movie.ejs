@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Movie</title>
+    <link rel="stylesheet" href="/publishers/addmovie.css">
+</head>
+<body>
+
+<div class="add-movie-container">
+  <div class="add-movie-card">
+    <h2>Add New Movie</h2>
+
+    <form action="/publisher/add-movie" method="POST" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label>Theme</label>
+            <input type="text" name="theme" required>
+        </div>
+
+        <div class="form-group">
+            <label>Type</label>
+            <input type="number" name="type_id" required>
+        </div>
+
+        <div class="form-group">
+            <label>Publish Date</label>
+            <input type="date" name="publish_date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Expire Date</label>
+            <input type="date" name="expire_date" required>
+        </div>
+
+        <div class="form-group">
+            <label>Select Image</label>
+            <input type="file" name="image">
+        </div>
+
+        <button type="submit">Add Movie</button>
+
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

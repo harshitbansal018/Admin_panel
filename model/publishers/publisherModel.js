@@ -1,16 +1,18 @@
-// const db = require("../../config/db");
+const db = require("../../config/db");
 
-// exports.findByEmail = async (email) => {
-//   const [rows] = await db.query(
-//     "SELECT * FROM publishers WHERE email = ?",
-//     [email]
-//   );
-//   return rows[0];
-// };
+// 🔍 Find publisher by email
+exports.findPublisherByEmail = async (email) => {
+  const [rows] = await db.query(
+    "SELECT * FROM users WHERE email = ? AND role = 'publisher' LIMIT 1",
+    [email]
+  );
+  return rows[0];
+};
 
-// exports.createPublisher = async (name,username, email, password) => {
-//   await db.query(
-//     "INSERT INTO publishers (name,username, email, password) VALUES ( ?, ?, ?, ?)",
-//     [name,username, email, password]
-//   );
-// };
+// ➕ Create publisher (stored in users table)
+exports.createPublisher = async (name, email, password) => {
+  await db.query(
+    "INSERT INTO users (name, email, password, role, is_active) VALUES (?, ?, ?, ?, ?)",
+    [name, email, password, "publisher", 1]
+  );
+};

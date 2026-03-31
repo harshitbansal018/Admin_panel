@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { isAuth } = require('../../middleware/auth');
+
+const { isAuth, isAdmin } = require('../../middleware/auth');
 const publisherController = require('../../controllers/admin/publisherController');
 
-// 🎬 Publisher list route
-router.get('/publishers',isAuth, publisherController.getPublishers);
+// 📄 Publisher list (ADMIN ONLY)
+router.get('/publishers', isAuth, isAdmin, publisherController.getPublishers);
 
 module.exports = router;

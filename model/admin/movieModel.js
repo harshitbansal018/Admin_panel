@@ -5,12 +5,13 @@ exports.getAllMovies = async () => {
             SELECT 
                 m.*,
                 mt.type_name AS movie_type,
-                p.name AS publisher_name   -- ✅ added
+                u.name AS publisher_name   -- ✅ FIXED
             FROM movies m
             LEFT JOIN movie_types mt 
                 ON m.type_id = mt.id
-            LEFT JOIN publishers p       -- ✅ added
-                ON m.publisher_id = p.id
+            LEFT JOIN users u            -- ✅ FIXED
+                ON m.publisher_id = u.id
+            WHERE u.role = 'publisher'   -- ✅ ensure correct role
             ORDER BY m.id DESC
         `);
 

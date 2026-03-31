@@ -14,42 +14,45 @@ const userRoutes = require('./routes/admin/userRoute');
 const movieTypeRoutes = require('./routes/admin/movietypeRoute');
 const movieRoutes = require('./routes/admin/moviesRoutes');
 const dashboardRoute = require('./routes/admin/dashboardRoute');
-
-// ⚠️ Rename this if it's admin managing users
 const adminPublisherRoutes = require('./routes/admin/publisherRoute');
 
-// Publisher routes
-const publisherAuthRoutes = require('./routes/publishers/publisherRoute');
+// 🔹 Publisher Routes
 const publisherDashboardRoute = require('./routes/publishers/dashboardRoute');
 const publisherMoviesRoutes = require('./routes/publishers/moviesRoute');
 
+// 🔹 User Routes
+const userHome = require('./routes/user/userRoute');
+
+// 🔐 Middleware
+const { isAuth, isAdmin, isPublisher, isUser } = require('./middleware/auth');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 
 // ==========================
 // 🗄️ DB INIT + SEED
 // ==========================
 initDB();
 
-if (fs.existsSync('./data/data.json')) {
-  importData();
-}
-
+// ❌ REMOVE AUTO SEED (IMPORTANT)
+// if (fs.existsSync('./data/data.json')) {
+//   importData();
+// }
 
 // ==========================
 // 🔐 SESSION CONFIG
 // ==========================
 app.use(session({
-  secret: 'secret-key',
+  name: 'session_id',
+  secret: process.env.SESSION_SECRET || 'supersecret123',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 10 * 60 * 1000, // 10 minutes
-    httpOnly: true,         // 🔥 security
+    maxAge: 10 * 60 * 1000, // 10 min
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production"
   }
 }));
-
 
 // ==========================
 // 🧱 MIDDLEWARE
@@ -58,12 +61,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 🚫 Disable cache (important for auth)
+// 🔥 NO CACHE (BACK BUTTON FIX)
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   next();
 });
-
 
 // ==========================
 // 🎨 VIEW ENGINE
@@ -71,54 +75,59 @@ app.use((req, res, next) => {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
 // ==========================
-// 🌍 GLOBAL USER (ROLE BASED)
+// 🌍 GLOBAL USER
 // ==========================
 app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
-  res.locals.role = req.session.user?.role || null;
+  res.locals.user = req.session?.user || null;
+  res.locals.role = req.session?.user?.role || null;
   next();
 });
-
 
 // ==========================
 // 📁 STATIC FILES
 // ==========================
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // ==========================
 // 🚀 ROUTES
 // ==========================
 
-// 🔹 Admin Routes
+// 🔹 Public Auth Routes
 app.use('/admin', userRoutes);
-app.use('/admin', movieTypeRoutes);
-app.use('/admin', movieRoutes);
-app.use('/admin', dashboardRoute);
-app.use('/admin', adminPublisherRoutes);
+
+// 🔹 Admin Routes
+app.use('/admin', isAuth, isAdmin, movieTypeRoutes);
+app.use('/admin', isAuth, isAdmin, movieRoutes);
+app.use('/admin', isAuth, isAdmin, dashboardRoute);
+app.use('/admin', isAuth, isAdmin, adminPublisherRoutes);
 
 // 🔹 Publisher Routes
-app.use('/publisher', publisherAuthRoutes);
-app.use('/publisher', publisherDashboardRoute);
-app.use('/publisher', publisherMoviesRoutes);
+app.use('/publisher', isAuth, isPublisher, publisherDashboardRoute);
+app.use('/publisher', isAuth, isPublisher, publisherMoviesRoutes);
 
+// 🔹 User Routes (🔥 FIXED)
+app.use('/user', isAuth, isUser, userHome);
 
 // ==========================
-// 🔁 DEFAULT ROUTE (SMART)
+// 🔁 DEFAULT ROUTE
 // ==========================
 app.get('/', (req, res) => {
   if (req.session?.user) {
+
     if (req.session.user.role === "admin") {
       return res.redirect('/admin/dashboard');
-    } else {
+    } 
+    else if (req.session.user.role === "publisher") {
       return res.redirect('/publisher/dashboard');
-    }
+    } 
+    else if (req.session.user.role === "user") {
+      return res.redirect('/user/home');
+    } 
   }
+
   res.redirect('/admin/login');
 });
-
 
 // ==========================
 // ❌ 404 HANDLER
@@ -126,7 +135,6 @@ app.get('/', (req, res) => {
 app.use((req, res) => {
   res.status(404).send('Page Not Found');
 });
-
 
 // ==========================
 // 🟢 START SERVER

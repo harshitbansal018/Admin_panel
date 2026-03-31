@@ -1,18 +1,20 @@
 const db = require('../../config/db');
 
 exports.getAllPublishers = async () => {
-    const [publishers] = await db.query(`
+    const [rows] = await db.query(`
         SELECT 
-            p.id,
-            p.name,
-            p.created_at,
-            p.email,
+            u.id,
+            u.name,
+            u.email,
+            u.is_active,
             COUNT(m.id) AS total_movies
-        FROM publishers p
+        FROM users u
         LEFT JOIN movies m 
-            ON p.id = m.publisher_id   -- ✅ USE THIS
-        GROUP BY p.id
+            ON u.id = m.publisher_id
+        WHERE u.role = 'publisher'
+        GROUP BY u.id
+        ORDER BY u.id DESC
     `);
 
-    return publishers;
+    return rows;
 };
