@@ -54,11 +54,13 @@
                                 </button>
                             </form>
                         </td>
-                        <td >
-                          <span class="status  <%= movie.status ? 'active' : 'inactive' %>">
-                            <%= movie.status ? 'Active' : 'Inactive' %>
-                        </span>
-                        </td>
+           <td>
+  <a href="/admin/toggle-status/<%= movie.id %>">
+    <span class="status <%= movie.status === 'active' ? 'active' : 'inactive' %>">
+      <%= movie.status === 'active' ? 'Active' : 'Inactive' %>
+    </span>
+  </a>
+</td>
                     </tr>
                     <% }) %>
                         <% } else { %>

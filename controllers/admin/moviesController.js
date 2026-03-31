@@ -1,73 +1,99 @@
 const db = require('../../config/db');
 const movieModel = require('../../model/admin/movieModel');
 const movieTypeModel = require('../../model/admin/movieTypeModel');
+
 const movieController = {
-    //  GET all movies
+
+  // 🎬 GET all movies
   getMovies: async (req, res) => {
     try {
-        const user = req.session.user;
+      const user = req.session.user;
 
-        if (!user) {
-            return res.redirect('/admin/login');
-        }
+      if (!user) {
+        return res.redirect('/admin/login');
+      }
 
-        let movies;
+      let movies;
 
-        if (user.role === "admin") {
-            movies = await movieModel.getAllMovies();
-        } else if (user.role === "publisher") {
-            movies = await movieModel.getMoviesByPublisher(user.id);
-        }
+      if (user.role === "admin") {
+        movies = await movieModel.getAllMovies();
+      } else if (user.role === "publisher") {
+        movies = await movieModel.getMoviesByPublisher(user.id);
+      }
 
-        res.render('admin/admin', {
-            activePage: 'movies',
-            movies: movies,
-            user: user
-        });
+      res.render('admin/admin', {
+        activePage: 'movies',
+        movies,
+        user
+      });
 
     } catch (err) {
-        console.error(err);
-        res.send('Error fetching movies');
+      console.error(err);
+      res.send('Error fetching movies');
     }
-},
-deleteMovie: async (req, res) => {
+  },
+
+  // 🗑️ Delete movie
+  deleteMovie: async (req, res) => {
     const id = req.params.id;
 
     try {
-        const user = req.session.user;
+      const user = req.session.user;
 
-        if (!user) {
-            return res.redirect('/admin/login');
-        }
+      if (!user) {
+        return res.redirect('/admin/login');
+      }
 
-        // 🧠 Step 1: Get movie
-        const movie = await movieModel.getMovieById(id);
+      const movie = await movieModel.getMovieById(id);
 
-        if (!movie) {
-            return res.send('Movie not found');
-        }
+      if (!movie) {
+        return res.send('Movie not found');
+      }
 
-        // 🚨 ROLE CHECK
-        if (user.role === "publisher" && movie.publisher_id !== user.id) {
-            return res.send("Access Denied: You can only delete your own movies");
-        }
+      // 🚨 ROLE CHECK
+      if (user.role === "publisher" && movie.publisher_id !== user.id) {
+        return res.send("Access Denied");
+      }
 
-        // 🗑️ Step 2: Delete movie
-        await movieModel.deleteMovie(id);
+      await movieModel.deleteMovie(id);
 
-        // 🔍 Step 3: Check remaining movies of same type
-        const remainingMovies = await movieModel.countMoviesByType(movie.type_id);
+      const remainingMovies = await movieModel.countMoviesByType(movie.type_id);
 
-        // ❗ Step 4: Delete type if no movies left
-        if (remainingMovies === 0) {
-            await movieTypeModel.deleteType(movie.type_id);
-        }
+      if (remainingMovies === 0) {
+        await movieTypeModel.deleteType(movie.type_id);
+      }
 
-        res.redirect('/admin/movies');
+      res.redirect('/admin/movies');
 
     } catch (err) {
-        console.error(err);
-        res.send('Error deleting movie');
+      console.error(err);
+      res.send('Error deleting movie');
     }
-}};
+  },
+
+  // 🔄 Toggle Status (🔥 FIXED)
+  toggleStatus: async (req, res) => {
+    try {
+      const movieId = req.params.id;
+
+      const movie = await movieModel.getMovieById(movieId); // ✅ FIXED
+
+      if (!movie) {
+        return res.send("Movie not found");
+      }
+
+      const newStatus = movie.status === 'active' ? 'inactive' : 'active';
+
+      await movieModel.updateStatus(movieId, newStatus); // ✅ FIXED
+
+      res.redirect('/admin/movies');
+
+    } catch (err) {
+      console.error(err);
+      res.send("Error updating status");
+    }
+  }
+
+};
+
 module.exports = movieController;

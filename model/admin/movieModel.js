@@ -45,3 +45,10 @@ exports.countMoviesByType = async (typeId) => {
     );
     return rows[0].count;
 };
+// 🔄 Update movie status
+exports.updateStatus = async (id, status) => {
+    return await db.query(
+        "UPDATE movies SET status = ? WHERE id = ?",
+        [status, id]
+    );
+};

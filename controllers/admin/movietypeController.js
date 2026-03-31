@@ -25,23 +25,7 @@ const movieTypeController = {
     },
 
     // Insert Movie Type
-    postAddMovieType: async (req, res) => {
-        const { name, status } = req.body;
-
-        try {
-            if (!name) {
-                return res.send('Name is required');
-            }
-
-            await movieTypeModel.addMovieType(name, status || 'active');
-
-            res.redirect('/admin/movie-types');
-
-        } catch (err) {
-            console.error(err);
-            res.send('Error adding movie type');
-        }
-    },
+    
 
     // Toggle Status
     toggleStatus: async (req, res) => {
@@ -79,7 +63,24 @@ const movieTypeController = {
         } catch (err) {
             console.error(err);
             res.send('Error deleting movie type');
-        }}
+        }},
+       addMovieType: async (req, res) => {
+    try {
+        const { name, status } = req.body;
+
+        if (!name) {
+            return res.send("Type name is required");
+        }
+
+        await movieTypeModel.addMovieType(name, status || 'active');
+
+        res.redirect('/admin/movie-types');
+
+    } catch (err) {
+        console.error(err);
+        res.send("Error adding movie type");
+    }
+}
 
 };
 

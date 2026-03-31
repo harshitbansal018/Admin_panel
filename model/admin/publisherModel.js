@@ -7,6 +7,7 @@ exports.getAllPublishers = async () => {
             u.name,
             u.email,
             u.is_active,
+            u.created_at,
             COUNT(m.id) AS total_movies
         FROM users u
         LEFT JOIN movies m 

@@ -20,5 +20,11 @@ exports.deleteType = async (id) => {
         [id]
     );
 };
+exports.addMovieType = async (name, status) => {
+    return await db.query(
+        "INSERT INTO movie_types (type_name, status) VALUES (?, ?)",
+        [name, status]
+    );
+}
 
 

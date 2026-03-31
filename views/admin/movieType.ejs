@@ -8,9 +8,10 @@
 </head>
 <body>
     <h2>Movie Types</h2>
-
+     <button onclick="openModal()" class="add-btn">+ Add Type</button>
 <table class="movieType-table">
     <thead>
+   
         <tr>
             <th>Type Name</th>
             <th>Created At</th>
@@ -43,5 +44,41 @@
     <% } %>
 </tbody>
 </table>
+<!-- Modal -->
+<div id="addTypeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+
+        <h3>Add Movie Type</h3>
+
+        <form action="/admin/movie-types/add" method="POST">
+            <input type="text" name="name" placeholder="Enter type name" required />
+
+            <select name="status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</div>
+<script>
+function openModal() {
+    document.getElementById("addTypeModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("addTypeModal").style.display = "none";
+}
+
+// Close when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById("addTypeModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
 </body>
 </html>

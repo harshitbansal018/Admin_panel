@@ -20,6 +20,7 @@
                     <th>Status</th>
                     <th>Publish Date</th>
                     <th>Expire Date</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
@@ -39,6 +40,8 @@
 
                         <td><%= movie.publish_date %></td>
                         <td><%= movie.expire_date %></td>
+                        <td>
+                           <a href="/publisher/delete/<%= movie.id %>" class="btn btn-delete">Delete</a>
                     </tr>
                 <% }) %>
             </tbody>
